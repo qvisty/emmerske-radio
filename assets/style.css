@@ -239,7 +239,6 @@ body.playing .i-pause { display: block; }
   display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px 7px 10px; border-radius: 999px; border: 0;
   background: var(--c); color: #fff; font-size: 14px; font-weight: 500;
 }
-.ch-dl { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); text-decoration: none; font-size: 16px; color: var(--ink-2); }
 .ch-prog { position: absolute; left: 0; bottom: 0; height: 4px; width: 0; background: var(--c); transition: width .25s linear; }
 body.playing .ch:not(.active) .ch-play .i-play { display: block; }
 body.playing .ch:not(.active) .ch-play .i-pause { display: none; }
