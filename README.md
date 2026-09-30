@@ -6,11 +6,10 @@ Præsentationsside for radioprogrammet **Nadim og det flyvende tæppe** (Radio G
 
 ## Indhold
 - Afspiller med bølgeform, kapitelmarkører, hastighed, delbare tidspunkter (`#t=sekunder`) og "læs med"-tekst
-- 17 kapitler – afspil direkte eller hent som MP3
+- 17 kapitler – afspil direkte
 - Stemmerne, citater med afspilning, fuld søgbar transskription der følger lyden
 - Slides ("Trivslens arkitektur") og infografikker med zoom
 - Læsevenlig visning (større tekst og mere luft) samt lyst/mørkt tema
-- Podcast-feed: `feed.xml`
 
 ## Opdatering af data
 `assets/data.js` genereres fra kapitelmærkerne i MP3'en og SRT-filen:

@@ -160,7 +160,6 @@
         <p class="ch-desc">${esc(c.desc)}</p>
         <div class="ch-actions">
           <button class="ch-play" data-i="${i}"><svg class="i-play"><use href="#i-play"/></svg><svg class="i-pause"><use href="#i-pause"/></svg><span>Afspil</span></button>
-          <a class="ch-dl" href="${enc(c.file)}" download title="Hent kapitel ${c.n} som MP3"><svg><use href="#i-dl"/></svg><span class="sr">Hent kapitel ${c.n}</span></a>
         </div>
       </div>
       <i class="ch-prog"></i>
@@ -430,11 +429,6 @@
 
   /* ---------- Downloads ---------- */
   const DL = [
-    ['Hele programmet', [
-      ['MP3', 'Hele programmet med kapitelmærker', 'EMMERSKE EFTERSKOLE - med kapitler.mp3', '70 MB · 48:44', '--brick'],
-      ['M4A', 'Hele programmet – Apple-kapitler', 'EMMERSKE EFTERSKOLE - med kapitler.m4a', '55 MB · kapitler i Podcasts/iTunes', '--brick'],
-      ['MP3', 'Uden stilhed – strammet klip', 'EMMERSKE EFTERSKOLE - uden stilhed.mp3', '70 MB', '--brick'],
-    ]],
     ['Tekst', [
       ['TXT', 'Transskription med tidskoder', 'EMMERSKE EFTERSKOLE - transskription.txt', '66 KB · automatisk', '--sage'],
       ['SRT', 'Undertekstfil', 'EMMERSKE EFTERSKOLE - transskription.srt', '91 KB · til video/afspillere', '--sage'],
@@ -446,13 +440,9 @@
       ['PNG', 'Hvor skuldrene sænkes – infografik', 'Filer/Emmerske Efterskole hvor skuldrene sænkes.png', '5 MB', '--mustard'],
       ['PNG', 'Fundament for trivsel – infografik', 'Filer/Emmerske Efterskole Fundament for trivsel.png', '4 MB', '--mustard'],
     ]],
-    ['Arkiv', [
-      ['MP3', 'Version 1 – med musikomtale', 'Version 1 - med musikomtale/EMMERSKE EFTERSKOLE - med kapitler.mp3', '75 MB · første redigering', '--sky'],
-      ['RSS', 'Podcast-feed', 'feed.xml', 'Abonnér i din podcast-app', '--sky'],
-    ]],
   ];
   $('#downloads').innerHTML = DL.map(([g, items]) => `<p class="dl-group">${g}</p>` + items.map(([type, title, path, meta, col]) => `
-    <a class="dl reveal" href="${enc(path)}" ${type === 'RSS' ? '' : 'download'} style="--c:var(${col})">
+    <a class="dl reveal" href="${enc(path)}" download style="--c:var(${col})">
       <span class="dl-type">${type}</span>
       <span class="dl-body"><strong>${esc(title)}</strong><small>${esc(meta)}</small></span>
       <svg><use href="#i-dl"/></svg>
