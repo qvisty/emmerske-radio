@@ -197,8 +197,25 @@ poly([(296, 504), (365, 412), (434, 504)], "none", sw=3)
 window(345, 520, 40, 50, cols=2, rows=2)
 add(f'<path d="M335,818 V735 A30,30 0 0 1 395,735 V818 Z" fill="#33403a" stroke="{INK}" stroke-width="2.2"/>')
 add(f'<path d="M365,708 V818" stroke="{INK}" stroke-width="1.4" opacity=".7"/>')
-# flagstang
-add(f'<path d="M478,820 V505" stroke="#d9d6cf" stroke-width="5"/><path d="M478,820 V505" stroke="{INK}" stroke-width="1" opacity=".5"/>')
+# flagstang med Dannebrog (proportioner 3:1:4,5 x 3:1:3)
+add(f'<path d="M478,820 V440" stroke="#ecebe6" stroke-width="6"/><path d="M478,820 V440" stroke="{INK}" stroke-width="1.2" opacity=".55"/>')
+add(f'<circle cx="478" cy="436" r="6" fill="#d9b44a" stroke="{INK}" stroke-width="1.4"/>')
+FX, FY, FW, FH = 481, 446, 92, 62
+u = FW / 8.5
+def wave(x, y):  # let bølgende flag
+    import math
+    t = (x - FX) / FW
+    return x, y + 7 * math.sin(t * 3.2) * t
+def flagpoly(x0, y0, x1, y1, fill, sw=0):
+    pts = [wave(x0 + (x1 - x0) * k / 8, y0) for k in range(9)] + [wave(x1 - (x1 - x0) * k / 8, y1) for k in range(9)]
+    add(f'<polygon points="{" ".join(f"{x:.1f},{y:.1f}" for x, y in pts)}" fill="{fill}" '
+        f'stroke="{INK}" stroke-width="{sw}" stroke-linejoin="round"/>')
+add('<g filter="url(#wash)">')
+flagpoly(FX, FY, FX + FW, FY + FH, "#c8102e")
+flagpoly(FX + 3 * u, FY, FX + 4 * u, FY + FH, "#f7f3ea")                     # lodret kors
+flagpoly(FX, FY + FH * 3 / 7, FX + FW, FY + FH * 4 / 7, "#f7f3ea")           # vandret kors
+add('</g>')
+flagpoly(FX, FY, FX + FW, FY + FH, "none", sw=2)
 
 # ---------------------------------------------------------------- forgrund: gårdsplads, vej, græs
 add('<g filter="url(#wash)">')
