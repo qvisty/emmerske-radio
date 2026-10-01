@@ -1,7 +1,6 @@
 """Bygger assets/data.js til GitHub Pages-siden.
 
-Læser kapitelmarkører fra MP3'en, transskriptionen (SRT) og beregner en
-bølgeform. Kør fra repoets rod:  python tools/build_data.py
+Læser kapitelmarkører fra MP3'en og beregner en bølgeform. Kør fra repoets rod:  python tools/build_data.py
 Kræver: mutagen, miniaudio (pip install mutagen miniaudio)
 """
 import json, math, re
@@ -9,7 +8,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 MP3 = ROOT / "EMMERSKE EFTERSKOLE - med kapitler.mp3"
-SRT = ROOT / "EMMERSKE EFTERSKOLE - transskription.srt"
 OUT = ROOT / "assets" / "data.js"
 
 # Titler, medvirkende og beskrivelser (fra kapiteloversigten)
@@ -101,20 +99,6 @@ def chapters_from_mp3():
     return out, round(audio.info.length, 2)
 
 
-def parse_srt():
-    ts = lambda h, m, s, ms: int(h) * 3600 + int(m) * 60 + int(s) + int(ms) / 1000
-    cues = []
-    blocks = re.split(r"\n\s*\n", SRT.read_text(encoding="utf-8").strip())
-    for b in blocks:
-        lines = b.strip().splitlines()
-        m = re.match(r"(\d+):(\d+):(\d+),(\d+) --> (\d+):(\d+):(\d+),(\d+)", lines[1])
-        if not m:
-            continue
-        g = m.groups()
-        cues.append([round(ts(*g[:4]), 2), round(ts(*g[4:]), 2), " ".join(lines[2:]).strip()])
-    return cues
-
-
 def waveform(n=1400):
     try:
         import miniaudio
@@ -141,12 +125,11 @@ if __name__ == "__main__":
         "duration": duration,
         "audio": MP3.name,
         "chapters": chapters,
-        "cues": parse_srt(),
         "peaks": waveform(),
-        "people": [dict(name=a, role=b, bio=c, chapters=d) for a, b, c, d in PEOPLE],
         "quotes": [dict(text=a, who=b, t=c) for a, b, c in QUOTES],
+        "people": [dict(name=a, role=b, bio=c, chapters=d) for a, b, c, d in PEOPLE],
         "slides": SLIDES,
     }
     OUT.write_text("window.EE = " + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";\n",
                    encoding="utf-8")
-    print(f"Skrev {OUT} – {len(chapters)} kapitler, {len(data['cues'])} replikker, {len(data['peaks'])} peaks")
+    print(f"Skrev {OUT} – {len(chapters)} kapitler, {len(data['peaks'])} peaks")

@@ -25,11 +25,6 @@
     for (let k = 0; k < D.chapters.length; k++) if (t >= D.chapters[k].start - 0.05) i = k;
     return i;
   };
-  const cueAt = (t) => { // binær søgning: sidste replik der er startet
-    let lo = 0, hi = D.cues.length - 1, r = -1;
-    while (lo <= hi) { const m = (lo + hi) >> 1; if (D.cues[m][0] <= t) { r = m; lo = m + 1; } else hi = m - 1; }
-    return r;
-  };
   const toast = (msg) => {
     const el = $('#toast'); el.textContent = msg; el.classList.add('show');
     clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 2200);
@@ -39,12 +34,32 @@
   let pendingT = null; // tidspunkt valgt før lydens metadata er indlæst
   const now = () => (pendingT ?? audio.currentTime);
   function seek(t, play = true) {
+    endClip();
     t = Math.min(Math.max(0, t), duration() - 0.5);
     if (audio.readyState >= 1) { audio.currentTime = t; pendingT = null; } else { pendingT = t; }
     if (play) audio.play().catch(() => {});
     tick(true);
   }
-  function toggle() { audio.paused ? audio.play().catch(() => {}) : audio.pause(); }
+  function toggle() { endClip(); audio.paused ? audio.play().catch(() => {}) : audio.pause(); }
+
+  /* ---------- Klip: afspil et udsnit og stop af sig selv ---------- */
+  let clip = null;
+  function endClip() {
+    if (!clip) return;
+    clip.btn.classList.remove('on'); clip.btn.style.setProperty('--p', 0); clip = null;
+  }
+  function playClip(btn) {
+    if (clip && clip.btn === btn) { audio.paused ? audio.play().catch(() => {}) : audio.pause(); return; }
+    seek(+btn.dataset.t, true);
+    clip = { btn, t: +btn.dataset.t, end: +btn.dataset.end };
+    btn.classList.add('on');
+  }
+  function clipTick(t) {
+    if (!clip) return;
+    clip.btn.style.setProperty('--p', Math.min(1, Math.max(0, (t - clip.t) / (clip.end - clip.t))));
+    if (t >= clip.end) { audio.pause(); endClip(); }
+  }
+  document.addEventListener('click', (e) => { const b = e.target.closest('.clip'); if (b) playClip(b); });
 
   audio.addEventListener('play', () => { document.body.classList.add('playing'); loop(); });
   audio.addEventListener('pause', () => { document.body.classList.remove('playing'); store.set('ee-pos', audio.currentTime); });
@@ -184,6 +199,20 @@
     </article>`).join('');
   $('#people').addEventListener('click', (e) => { const b = e.target.closest('.chip'); if (b) seek(D.chapters[+b.dataset.ch].start); });
 
+  /* ---------- Personer i toppen og i fortællingen ---------- */
+  const personIdx = (name) => D.people.findIndex((p) => p.name === name);
+  $('#heroAvatars').innerHTML = D.people.map((p, i) =>
+    `<a class="av" href="#stemmer" style="--c:${chColor(i + 1)}" title="${esc(p.name)} – ${esc(p.role)}">${esc(initials(p.name))}</a>`).join('');
+  $$('.act-people').forEach((el) => {
+    el.innerHTML = el.dataset.people.split('|').map((n) => {
+      const i = personIdx(n), p = D.people[i];
+      if (!p) return '';
+      return `<button class="pchip" data-ch="${p.chapters[0] - 1}" style="--c:${chColor(i + 1)}" title="Hør ${esc(p.name)} i kapitel ${p.chapters[0]}">
+        <span class="av sm">${esc(initials(p.name))}</span><span><strong>${esc(p.name)}</strong><small>${esc(p.role)}</small></span></button>`;
+    }).join('');
+  });
+  document.addEventListener('click', (e) => { const b = e.target.closest('.pchip'); if (b) seek(D.chapters[+b.dataset.ch].start); });
+
   /* ---------- Citater ---------- */
   $('#quotes').innerHTML = D.quotes.map((q, i) => `
     <figure class="quote reveal ${i === 1 || i === 6 ? 'big' : ''}">
@@ -192,69 +221,8 @@
     </figure>`).join('');
   $('#quotes').addEventListener('click', (e) => { const b = e.target.closest('.q-play'); if (b) seek(+b.dataset.t - 0.3); });
 
-  /* ---------- Transskription ---------- */
-  const ts = $('#transcript'), toc = $('#tsToc');
-  const byCh = D.chapters.map(() => []);
-  D.cues.forEach((c, i) => byCh[chapterAt(c[0] + 0.3)].push(i));
-  ts.innerHTML = D.chapters.map((c, ci) => {
-    // saml replikker i afsnit ved pauser/sætningsslut for læsbarhed
-    let html = '', para = [], last = null;
-    byCh[ci].forEach((i) => {
-      const [s, , text] = D.cues[i];
-      if (last !== null && (s - last > 1.2 || para.length > 7) && /[.?!]$/.test(D.cues[i - 1][2])) { html += `<p>${para.join(' ')}</p>`; para = []; }
-      const stamp = para.length ? '' : `<span class="ts-t">${fmt(s)}</span>`;
-      para.push(`${stamp}<span class="cue" data-i="${i}">${esc(text)}</span>`);
-      last = D.cues[i][1];
-    });
-    if (para.length) html += `<p>${para.join(' ')}</p>`;
-    return `<section class="ts-ch" id="ts-${ci}"><h3>${pad(c.n)} ${esc(c.title)} <small>${esc(c.who)} · ${fmt(c.start)}</small></h3>${html}</section>`;
-  }).join('');
-  toc.innerHTML = D.chapters.map((c, i) => `<button data-i="${i}"><b>${pad(c.n)}</b>${esc(c.title)}</button>`).join('');
-  toc.addEventListener('click', (e) => {
-    const b = e.target.closest('button'); if (!b) return;
-    const sec = $('#ts-' + b.dataset.i);
-    ts.scrollTo({ top: sec.offsetTop - 4, behavior: 'smooth' });
-  });
-  const cueEls = [];
-  $$('.cue', ts).forEach((el) => { cueEls[+el.dataset.i] = el; });
-  ts.addEventListener('click', (e) => { const c = e.target.closest('.cue'); if (c) seek(D.cues[+c.dataset.i][0]); });
-  let userScrollAt = 0;
-  ts.addEventListener('wheel', () => { userScrollAt = Date.now(); }, { passive: true });
-  ts.addEventListener('touchmove', () => { userScrollAt = Date.now(); }, { passive: true });
-
-  // søgning
-  let hits = [], hitPos = -1;
-  const norm = (s) => s.toLowerCase();
-  function runSearch() {
-    const q = $('#tsSearch').value.trim();
-    hits.forEach((i) => { cueEls[i].innerHTML = esc(D.cues[i][2]); cueEls[i].classList.remove('hit-cur'); });
-    hits = []; hitPos = -1;
-    if (q.length < 2) { $('#tsCount').textContent = ''; return; }
-    const rx = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-    D.cues.forEach((c, i) => {
-      if (norm(c[2]).includes(norm(q))) { hits.push(i); cueEls[i].innerHTML = esc(c[2]).replace(rx, (m) => `<mark>${m}</mark>`); }
-    });
-    $('#tsCount').textContent = hits.length ? `${hits.length} fund` : 'Ingen fund';
-    if (hits.length) jumpHit(0);
-  }
-  function jumpHit(d) {
-    if (!hits.length) return;
-    if (hitPos >= 0) cueEls[hits[hitPos]].classList.remove('hit-cur');
-    hitPos = (hitPos + d + hits.length) % hits.length;
-    const el = cueEls[hits[hitPos]]; el.classList.add('hit-cur');
-    userScrollAt = Date.now();
-    ts.scrollTo({ top: el.offsetTop - ts.clientHeight / 3, behavior: 'smooth' });
-    $('#tsCount').textContent = `${hitPos + 1} af ${hits.length}`;
-  }
-  let st; $('#tsSearch').addEventListener('input', () => { clearTimeout(st); st = setTimeout(runSearch, 180); });
-  $('#tsSearch').addEventListener('keydown', (e) => { if (e.key === 'Enter') { jumpHit(e.shiftKey ? -1 : 1); e.preventDefault(); } });
-  $('#tsNext').onclick = () => jumpHit(1);
-  $('#tsPrev').onclick = () => jumpHit(-1);
-
   /* ---------- Opdatering pr. frame ---------- */
-  let lastCh = -1, lastCue = -2, lastSave = 0, raf = 0;
-  const tsVisible = { v: false };
-  new IntersectionObserver(([e]) => { tsVisible.v = e.isIntersecting; }).observe(ts);
+  let lastCh = -1, lastSave = 0, raf = 0;
 
   function tick(force) {
     const t = now(), dur = duration();
@@ -268,7 +236,6 @@
       if (ci !== lastCh) {
         chEls[lastCh]?.classList.remove('active'); chProg[lastCh] && (chProg[lastCh].style.width = '0');
         chEls[ci].classList.add('active');
-        $$('button', toc).forEach((b, k) => b.classList.toggle('active', k === ci));
       }
       lastCh = ci;
       $('#nowNum').textContent = pad(c.n); $('#nowTitle').textContent = c.title; $('#nowWho').textContent = c.who;
@@ -282,24 +249,7 @@
       }
     }
     chProg[ci].style.width = Math.min(100, ((t - c.start) / (c.end - c.start)) * 100) + '%';
-    // replikker
-    const k = cueAt(t);
-    if (k !== lastCue || force) {
-      cueEls[lastCue]?.classList.remove('now');
-      lastCue = k;
-      const cur = D.cues[k];
-      const live = cur && t <= cur[1] + 2.5;
-      $('#capCur').textContent = k < 0 ? 'Tryk på afspil – så kører teksten med her.' : cur[2];
-      $('#capCur').style.opacity = live || k < 0 ? 1 : 0.55;
-      $('#capPrev').textContent = D.cues[k - 1]?.[2] || '';
-      $('#capNext').textContent = D.cues[k + 1]?.[2] || '';
-      if (k >= 0) {
-        const el = cueEls[k]; el.classList.add('now');
-        if ($('#tsFollow').checked && tsVisible.v && Date.now() - userScrollAt > 4000 && !audio.paused) {
-          ts.scrollTo({ top: el.offsetTop - ts.clientHeight / 3, behavior: 'smooth' });
-        }
-      }
-    }
+    clipTick(t);
     drawWave(); drawEq();
     if (Date.now() - lastSave > 5000 && t > 5) { store.set('ee-pos', t); lastSave = Date.now(); }
   }
@@ -415,6 +365,7 @@
   $('#gallery').addEventListener('click', (e) => {
     const b = e.target.closest('.g-item'); if (b) openLightbox(b.dataset.full, b.dataset.orig, b.dataset.caption);
   });
+  document.addEventListener('click', (e) => { const b = e.target.closest('.zoomable'); if (b) openLightbox(b.dataset.full, '', b.dataset.caption); });
   $('#lbClose').onclick = closeLightbox;
   lb.addEventListener('click', (e) => { if (e.target === lb || e.target === lbScroll) closeLightbox(); });
   $('#lbImg').addEventListener('click', (e) => {
@@ -429,10 +380,6 @@
 
   /* ---------- Downloads ---------- */
   const DL = [
-    ['Tekst', [
-      ['TXT', 'Transskription med tidskoder', 'EMMERSKE EFTERSKOLE - transskription.txt', '66 KB · automatisk', '--sage'],
-      ['SRT', 'Undertekstfil', 'EMMERSKE EFTERSKOLE - transskription.srt', '91 KB · til video/afspillere', '--sage'],
-    ]],
     ['Materialer', [
       ['PDF', 'Trivslens Arkitektur – præsentation', 'Filer/Trivslens Arkitektur Emmerske Efterskole.pdf', '17 MB · 12 slides', '--mustard'],
       ['PPTX', 'Trivslens Arkitektur – PowerPoint', 'Filer/Trivslens Arkitektur Emmerske Efterskole.pptx', '18 MB · redigérbar', '--mustard'],
