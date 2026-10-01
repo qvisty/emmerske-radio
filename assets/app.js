@@ -381,7 +381,7 @@
   /* ---------- Downloads ---------- */
   const DL = [
     ['Materialer', [
-      ['PDF', 'Trivslens Arkitektur – præsentation', 'Filer/Trivslens Arkitektur Emmerske Efterskole.pdf', '17 MB · 12 slides', '--mustard'],
+      ['PDF', 'Trivslens Arkitektur – præsentation', 'Filer/Trivslens Arkitektur Emmerske Efterskole.pdf', '1,4 MB · 12 slides', '--mustard'],
       ['PPTX', 'Trivslens Arkitektur – PowerPoint', 'Filer/Trivslens Arkitektur Emmerske Efterskole.pptx', '12 dias med redigerbare tekstbokse', '--mustard'],
       ['PNG', 'Kapiteloversigt – infografik', 'Filer/Oversigt over radioprogrammet - rettede tider.png', '2 MB', '--mustard'],
       ['PNG', 'Hvor skuldrene sænkes – infografik', 'Filer/Emmerske Efterskole hvor skuldrene sænkes.png', '5 MB', '--mustard'],
