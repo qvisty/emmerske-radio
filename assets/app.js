@@ -244,7 +244,7 @@
       if ('mediaSession' in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
           title: `${pad(c.n)} ${c.title}`, artist: c.who, album: 'Emmerske Efterskole i radioen · Radio Globus',
-          artwork: [{ src: 'assets/img/skolen.webp', sizes: '820x827', type: 'image/webp' }],
+          artwork: [{ src: 'assets/img/forside.webp', sizes: '1000x1000', type: 'image/webp' }],
         });
       }
     }

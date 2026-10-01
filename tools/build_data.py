@@ -54,7 +54,7 @@ QUOTES = [
     ("De tager mobning meget seriøst her. Og det er meget sjovt at være sammen med folk hele tiden.", "Liam", 687),
     ("Man får mange flere venner her, fordi man bor jo sammen, så man er hele tiden sammen med folk.", "Liam", 720),
     ("Nogle af vores elever skal faktisk i første omgang få lyst til at lære igen.", "Forstander Jesper", 926),
-    ("Her kender man og vender med alle.", "Magnus og Sander", 1264),
+    ("Her kender man og er venner med alle.", "Magnus og Sander", 1264),
     ("Der er næsten 100 % af eleverne, der går til alle deres afgangsprøver.", "Forstander Jesper", 1406),
     ("At vi er en stor familie, og at de kan komme til mig lige så vel, som de kan komme til lærerne.", "Martin", 1727),
     ("Vi har meget fokus på at være sammen med eleverne og skabe en bedre fremtid for dem – sammen med dem.", "Tobias", 1954),
