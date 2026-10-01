@@ -2121,7 +2121,14 @@
 <line x1="369.0" y1="563.0" x2="375.4" y2="550.0" stroke="#ffffff" stroke-width="1.4" opacity=".55"/>
 <path d="M335,818 V735 A30,30 0 0 1 395,735 V818 Z" fill="#33403a" stroke="#3e3128" stroke-width="2.2"/>
 <path d="M365,708 V818" stroke="#3e3128" stroke-width="1.4" opacity=".7"/>
-<path d="M478,820 V505" stroke="#d9d6cf" stroke-width="5"/><path d="M478,820 V505" stroke="#3e3128" stroke-width="1" opacity=".5"/>
+<path d="M478,820 V440" stroke="#ecebe6" stroke-width="6"/><path d="M478,820 V440" stroke="#3e3128" stroke-width="1.2" opacity=".55"/>
+<circle cx="478" cy="436" r="6" fill="#d9b44a" stroke="#3e3128" stroke-width="1.4"/>
+<g filter="url(#wash)">
+<polygon points="481.0,446.0 492.5,446.3 504.0,447.3 515.5,448.4 527.0,449.5 538.5,450.0 550.0,449.5 561.5,448.1 573.0,445.6 573.0,507.6 561.5,510.1 550.0,511.5 538.5,512.0 527.0,511.5 515.5,510.4 504.0,509.3 492.5,508.3 481.0,508.0" fill="#c8102e" stroke="#3e3128" stroke-width="0" stroke-linejoin="round"/>
+<polygon points="513.5,448.2 514.8,448.4 516.2,448.5 517.5,448.7 518.9,448.8 520.2,448.9 521.6,449.0 522.9,449.2 524.3,449.3 524.3,511.3 522.9,511.2 521.6,511.0 520.2,510.9 518.9,510.8 517.5,510.7 516.2,510.5 514.8,510.4 513.5,510.2" fill="#f7f3ea" stroke="#3e3128" stroke-width="0" stroke-linejoin="round"/>
+<polygon points="481.0,472.6 492.5,472.9 504.0,473.8 515.5,475.0 527.0,476.1 538.5,476.5 550.0,476.1 561.5,474.6 573.0,472.2 573.0,481.0 561.5,483.5 550.0,485.0 538.5,485.4 527.0,484.9 515.5,483.9 504.0,482.7 492.5,481.8 481.0,481.4" fill="#f7f3ea" stroke="#3e3128" stroke-width="0" stroke-linejoin="round"/>
+</g>
+<polygon points="481.0,446.0 492.5,446.3 504.0,447.3 515.5,448.4 527.0,449.5 538.5,450.0 550.0,449.5 561.5,448.1 573.0,445.6 573.0,507.6 561.5,510.1 550.0,511.5 538.5,512.0 527.0,511.5 515.5,510.4 504.0,509.3 492.5,508.3 481.0,508.0" fill="none" stroke="#3e3128" stroke-width="2" stroke-linejoin="round"/>
 <g filter="url(#wash)">
 <polygon points="-10.5,817.4 1010.7,817.2 1010.5,868.5 -10.6,869.5" fill="#e6dbc4" stroke="#3e3128" stroke-width="0" stroke-linejoin="round" />
 <polygon points="-10.8,869.9 1011.3,870.0 1009.8,938.9 -9.3,938.8" fill="#b4b1a8" stroke="#3e3128" stroke-width="0" stroke-linejoin="round" />
