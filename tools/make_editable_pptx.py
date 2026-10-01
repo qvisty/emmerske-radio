@@ -1,10 +1,11 @@
 """Gør præsentationen "Trivslens Arkitektur" redigerbar.
 
 Hvert dias i den oprindelige fil er ét fladt billede. Scriptet:
-  1. læser billederne fra PDF'en (samme billeder som i PPTX'en),
+  1. læser de oprindelige billeder fra tools/kilde (samme billeder som i den første PPTX),
   2. finder teksten med Windows' indbyggede OCR (tools/ocr.ps1),
   3. fjerner den valgte tekst fra billedet (inpainting),
-  4. lægger teksten ind igen som tekstbokse med målt farve, størrelse og placering.
+  4. lægger teksten ind igen som tekstbokse med målt farve, størrelse og placering,
+  5. eksporterer PDF og billeder til hjemmesiden via PowerPoint.
 
 Håndskrevne noter og tekst inde i tegningerne forbliver en del af billedet.
 
@@ -24,8 +25,10 @@ from pptx.enum.text import PP_ALIGN
 from pptx.util import Emu, Pt
 
 ROOT = Path(__file__).resolve().parent.parent
-PDF = ROOT / "Filer" / "Trivslens Arkitektur Emmerske Efterskole.pdf"
+SOURCE = ROOT / "tools" / "kilde" / "Trivslens Arkitektur - original.pdf"  # de oprindelige, flade dias
 OUT = ROOT / "Filer" / "Trivslens Arkitektur Emmerske Efterskole.pptx"
+OUT_PDF = OUT.with_suffix(".pdf")
+SLIDE_IMG = ROOT / "assets" / "slides"            # billeder til hjemmesiden
 WORK = ROOT / "tools" / ".pptx-work"          # mellemfiler (ignoreres af git)
 
 W_PX, H_PX = 1376, 768                        # billedernes opløsning
@@ -54,9 +57,10 @@ BASELINE = {"Arial": (0.724, 0.044), "Arial Narrow": (0.714, 0.012),
 #   lines: OCR-linjenumre, eller dict(i=nr, text=rettet tekst, from_word=nr, box=(x0,y0,x1,y1))
 #   **fed** markerer fede ord.  font: sans (Arial/Arial Narrow vælges automatisk),
 #   serif, hand.  bold: hele blokken fed.  align: l/c.
+#   erase: OCR-linjer der fjernes fra billedet uden at blive til tekst (fx en dobbelt linje).
 # --------------------------------------------------------------------------
-def B(lines, font="sans", bold=False, align="l"):
-    return dict(lines=lines, font=font, bold=bold, align=align)
+def B(lines, font="sans", bold=False, align="l", erase=()):
+    return dict(lines=lines, font=font, bold=bold, align=align, erase=erase)
 
 SLIDES = {
     1: [B([0, 1]),
@@ -74,13 +78,14 @@ SLIDES = {
         B([dict(i=1, text="**Mellemste ring**"), dict(i=2, text="**(Specialiseret Støtte):**"),
            dict(i=9, text="Tobias (AKT-teamet -", from_word="Tobias"), 10, 11, 12, 13]),
         B([dict(i=3, text="**Eleven**"), 4], align="c"),
-        B([dict(i=5, text="**Inderste ring (Nærværende Lærere):**"), 6, 7, 8]),
+        B([dict(i=5, text="**Inderste ring (Nærværende Lærere):**"),
+           dict(i=6, text="Kjeld (Matematik/Håndværk) - Har tid til"), 7, 8]),
         B([dict(i=14, text="**Yderste ring (Det Holistiske Hjem):**"), 15, 16])],
     5: [B([0], bold=True),
         B([dict(i=1, text="**KRAP** (Kognitiv, Ressourcefokuseret,"), 2, 3, 4]),
         B([dict(i=5, text="**4. Evaluering & Vækst:**"), 6, 7, 8, 9]),
         B([dict(i=10, text="**1. Kort Samtale & Observation:**"), 11, 12]),
-        B([dict(i=13, text="**2. Perspektivering:**"), 14, 15, 16, 17]),
+        B([dict(i=13, text="**2. Perspektivering:**"), 14, 15, 16], erase=[17]),  # "forståelse." stod to gange
         B([dict(i=18, text="**3. Skræddersyet Plan (2-4 Uger):**"), 19, 20])],
     6: [B([0], bold=True),
         B([dict(i=1, text="**Færre Elever**"), 2, 3, 4, 5]),
@@ -107,7 +112,7 @@ SLIDES = {
     11: [B([0]), B([1, 2], align="c"), B([3, 4], align="c"), B([5, 6], align="c"), B([7, 8], align="c"),
          B([10], bold=True, align="c")],
     12: [B([0], font="serif"), B([1, 2]), B([3], align="c"), B([4], align="c"), B([8], align="c"),
-         B([10], bold=True), B([11, 12]),
+         B([10], bold=True), B([11, dict(i=12, text="økonomi og støttemuligheder (Tlf: 74 72 44 33).")]),
          B([dict(i=13, to_word="Rundvisning:")], bold=True), B([14, 15, 16]),
          B([dict(i=18, text="Mærk Forskellen:", box=(846, 613, 1050, 638))], bold=True), B([19, 20])],
 }
@@ -259,14 +264,15 @@ def layout_block(block, ocr, img):
         bw = max(w + i for w, i in zip(widths, indents)) * 1.08 + 8
     return dict(fam=fam, sizes=sizes, pitches=pitches, left=left, top=top, width=bw,
                 height=sum(pitches) + 4, lines=lines, indents=indents,
-                color=text_color(img, lines[0]), align=block["align"])
+                color=text_color(img, lines[0]), align=block["align"],
+                erase=[line_geometry(i, ocr) for i in block["erase"]])
 
 
 def clean_image(img, blocks_layout):
     a = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
     mask = np.zeros(a.shape[:2], np.uint8)
     for bl in blocks_layout:
-        for l in bl["lines"]:
+        for l in bl["lines"] + bl["erase"]:
             for w in l["words"]:
                 pad = max(2, int(w["h"] * 0.12))
                 cv2.rectangle(mask, (int(w["x"]) - pad, int(w["y"]) - pad),
@@ -299,7 +305,7 @@ def add_textbox(slide, bl, name):
 
 def main():
     WORK.mkdir(exist_ok=True)
-    doc = pymupdf.open(PDF)
+    doc = pymupdf.open(SOURCE)
     prs = Presentation(); prs.slide_width = SLIDE_W; prs.slide_height = SLIDE_H
     for n, page in enumerate(doc, 1):
         xref = page.get_images(full=True)[0][0]
@@ -317,6 +323,21 @@ def main():
         print(f"dias {n:2d}: {len(layouts)} tekstbokse")
     prs.save(OUT)
     print("Skrev", OUT)
+    export_assets()
+
+
+def export_assets():
+    """PDF og slide-billeder til hjemmesiden, renderet af PowerPoint selv."""
+    png_dir = WORK / "export"
+    png_dir.mkdir(exist_ok=True)
+    subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
+                    str(ROOT / "tools" / "export_slides.ps1"), str(OUT), str(OUT_PDF), str(png_dir)], check=True)
+    for png in sorted(png_dir.glob("slide-*.png")):
+        im = Image.open(png).convert("RGB")
+        im.save(SLIDE_IMG / png.with_suffix(".webp").name, "WEBP", quality=82)
+        t = im.copy(); t.thumbnail((480, 480))
+        t.save(SLIDE_IMG / png.name.replace("slide-", "thumb-").replace(".png", ".webp"), "WEBP", quality=75)
+    print("Skrev", OUT_PDF, "og billeder i", SLIDE_IMG)
 
 
 if __name__ == "__main__":
