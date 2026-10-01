@@ -22,3 +22,6 @@ python tools/build_data.py
 Titler, beskrivelser, medvirkende og citater redigeres øverst i `tools/build_data.py`.
 
 `EMMERSKE EFTERSKOLE.mp3` (den uredigerede optagelse, 161 MB) er udeladt via `.gitignore`, da GitHub ikke tillader filer over 100 MB.
+
+## Redigerbar præsentation
+`Filer/Trivslens Arkitektur Emmerske Efterskole.pptx` er bygget med `tools/make_editable_pptx.py`: teksten i de oprindelige (flade) dias er fundet med Windows' OCR, fjernet fra billedet og lagt ind som tekstbokse. Håndskrevne noter i tegningerne er en del af billedet. Kræver Windows og `pip install pymupdf python-pptx opencv-python-headless pillow`. Hvilke tekster der bliver tekstbokse, styres af `SLIDES` øverst i scriptet.

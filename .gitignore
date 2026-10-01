@@ -1,2 +1,6 @@
 # Over GitHubs grænse på 100 MB pr. fil – kan ikke pushes
 EMMERSKE EFTERSKOLE.mp3
+
+# Mellemfiler fra tools/make_editable_pptx.py
+tools/.pptx-work/
+__pycache__/
