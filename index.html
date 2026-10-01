@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Emmerske Efterskole i radioen</title>
-<meta name="description" content="Radio Globus sendte direkte fra Emmerske Efterskole ved Tønder. Hør 49 minutter med elever, lærere og forstander – i 17 kapitler, med transskription, citater og materialer.">
+<meta name="description" content="Radio Globus sendte direkte fra Emmerske Efterskole ved Tønder. Hør 49 minutter med elever, lærere og forstander – i 17 kapitler, med citater og materialer.">
 <meta name="theme-color" content="#1b2a4a">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Emmerske Efterskole i radioen">
@@ -32,9 +32,6 @@
     <symbol id="i-next" viewBox="0 0 24 24"><path d="M18 5v14M5 5.5v13a.8.8 0 0 0 1.2.7L15 12.7a.8.8 0 0 0 0-1.4L6.2 4.8A.8.8 0 0 0 5 5.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
     <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
-    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
-    <symbol id="i-up" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-    <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
     <symbol id="i-full" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
@@ -66,7 +63,7 @@
     <span class="brand-text"><strong>Emmerske Efterskole</strong><em>i radioen</em></span>
   </a>
   <nav class="nav" aria-label="Sektioner">
-    <a href="#lyt">Lyt</a><a href="#kapitler">Kapitler</a><a href="#stemmer">Stemmer</a><a href="#citater">Citater</a><a href="#transskription">Transskription</a><a href="#materialer">Materialer</a>
+    <a href="#fortaelling">Fortællingen</a><a href="#lyt">Lyt</a><a href="#kapitler">Kapitler</a><a href="#stemmer">Stemmer</a><a href="#citater">Citater</a><a href="#materialer">Materialer</a>
   </nav>
   <div class="tools">
     <button class="icon-btn" id="readableBtn" aria-pressed="false" title="Læsevenlig visning"><svg><use href="#i-read"/></svg><span class="sr">Læsevenlig visning</span></button>
@@ -85,14 +82,12 @@
       <p class="lede">Op til Efterskolernes Dag sendte Radio Globus direkte fra os på Emmerske Efterskole ved Tønder. I 49 minutter fortæller elever, lærere og forstander om trivsel, fællesskab – og om at finde lysten til at lære igen.</p>
       <div class="hero-cta">
         <button class="big-play" id="heroPlay"><span class="bp-icon"><svg class="i-play"><use href="#i-play"/></svg><svg class="i-pause"><use href="#i-pause"/></svg></span><span class="bp-text"><strong id="heroPlayLabel">Hør hele programmet</strong><small id="heroPlaySub">48:44 · 17 kapitler</small></span></button>
-        <a class="ghost-btn" href="#kapitler">Vælg et kapitel</a>
+        <a class="ghost-btn" href="#fortaelling">Læs fortællingen <span aria-hidden="true">↓</span></a>
       </div>
-      <ul class="stats">
-        <li><strong>48:44</strong><span>minutter radio</span></li>
-        <li><strong>17</strong><span>kapitler</span></li>
-        <li><strong>12</strong><span>slides &amp; 3 infografikker</span></li>
-        <li><strong>919</strong><span>replikker transskriberet</span></li>
-      </ul>
+      <div class="hero-people">
+        <div class="avatars" id="heroAvatars"></div>
+        <p>Mød <strong>elever, lærere og forstander</strong> – med deres egne ord, fra radioen.</p>
+      </div>
     </div>
     <figure class="polaroid">
       <img src="assets/img/skolen.webp" alt="Tegning af Emmerske Efterskoles røde murstensbygninger omgivet af træer" width="820" height="827">
@@ -102,9 +97,174 @@
   </div>
 </section>
 
+<!-- FORTÆLLINGEN -->
+<section class="section story" id="fortaelling">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow">Fortællingen</p>
+      <h2>Seks ting, radioen fandt hos os</h2>
+      <p>Kort fortalt – med elevernes og de voksnes egne stemmer. Tryk på et klip for at høre det direkte fra udsendelsen.</p>
+    </header>
+    <div class="acts">
+    <article class="act reveal">
+      <div class="act-text">
+        <p class="act-num"><span>01</span></p>
+        <h3>Mange kommer med tunge skuldre</h3>
+        <p>Emmerske er en efterskole for ordblinde – og for unge, der har oplevet faglig mistrivsel, mobning eller bare har brug for ro. For mange har skolen været et sted med nederlag. Her skal det være omvendt.</p>
+        <div class="act-people" data-people="Jesper"></div>
+        
+        <div class="says">
+          <figure class="say">
+            <blockquote>Det er et sted, hvor de unge mennesker ikke skal opleve nederlag. Det er et sted, hvor man ikke skal føle sig forkert.</blockquote>
+            <figcaption>— Jesper, forstander</figcaption>
+            <button class="clip" data-t="111" data-end="121"><span class="clip-ico"><svg class="ci-play"><use href="#i-play"/></svg><svg class="ci-pause"><use href="#i-pause"/></svg></span><span>Hør det i radioen</span><span class="clip-len">0:10</span><i class="clip-bar"></i></button>
+          </figure>
+        </div>
+      </div>
+      <figure class="act-visual">
+        <button class="zoomable" data-full="assets/slides/slide-02.webp" data-caption="Fra overlevelsestilstand til væksttilstand">
+          <img src="assets/slides/slide-02.webp" alt="Slide: Fra overlevelsestilstand til væksttilstand" loading="lazy" width="1920" height="1072">
+        </button>
+        <figcaption>Fra præsentationen <em>Trivslens arkitektur</em></figcaption>
+      </figure>
+    </article>
+    <article class="act reveal">
+      <div class="act-text">
+        <p class="act-num"><span>02</span></p>
+        <h3>Først trivsel – så læring</h3>
+        <p>Det første år handler ofte om at finde troen på sig selv igen. Når skuldrene kommer ned, kommer lysten til at lære tilbage. Liam skiftede skole efter mobning – og fandt et fællesskab, han ikke havde haft før.</p>
+        <div class="act-people" data-people="Jesper|Liam"></div>
+        
+        <div class="says">
+          <figure class="say">
+            <blockquote>Nogle af vores elever skal faktisk i første omgang få lyst til at lære igen.</blockquote>
+            <figcaption>— Jesper, forstander</figcaption>
+            <button class="clip" data-t="920" data-end="933"><span class="clip-ico"><svg class="ci-play"><use href="#i-play"/></svg><svg class="ci-pause"><use href="#i-pause"/></svg></span><span>Hør det i radioen</span><span class="clip-len">0:13</span><i class="clip-bar"></i></button>
+          </figure>
+          <figure class="say">
+            <blockquote>Jeg havde det ikke så godt på min gamle skole … De tager mobning meget seriøst her.</blockquote>
+            <figcaption>— Liam, elev</figcaption>
+            <button class="clip" data-t="678" data-end="692"><span class="clip-ico"><svg class="ci-play"><use href="#i-play"/></svg><svg class="ci-pause"><use href="#i-pause"/></svg></span><span>Hør det i radioen</span><span class="clip-len">0:14</span><i class="clip-bar"></i></button>
+          </figure>
+        </div>
+      </div>
+      <figure class="act-visual">
+        <button class="zoomable" data-full="assets/slides/slide-03.webp" data-caption="Først trivsel, derefter læring">
+          <img src="assets/slides/slide-03.webp" alt="Slide: Først trivsel, derefter læring" loading="lazy" width="1920" height="1072">
+        </button>
+        <figcaption>Fra præsentationen <em>Trivslens arkitektur</em></figcaption>
+      </figure>
+    </article>
+    <article class="act reveal">
+      <div class="act-text">
+        <p class="act-num"><span>03</span></p>
+        <h3>Et hjem, hvor man kender alle</h3>
+        <p>Man bor sammen, spiser sammen og hygger på værelserne med billeder hjemmefra. Skolen er lille nok til, at alle kender alle – og der er plads til humor, som på elevernes egen kærestevæg.</p>
+        <div class="act-people" data-people="Emily & Olivia|Emma & Liv|Magnus & Sander"></div>
+        
+        <div class="says">
+          <figure class="say">
+            <blockquote>Her kender man og vender med alle.</blockquote>
+            <figcaption>— Magnus og Sander, andetårselever</figcaption>
+            <button class="clip" data-t="1259" data-end="1268"><span class="clip-ico"><svg class="ci-play"><use href="#i-play"/></svg><svg class="ci-pause"><use href="#i-pause"/></svg></span><span>Hør det i radioen</span><span class="clip-len">0:09</span><i class="clip-bar"></i></button>
+          </figure>
+          <figure class="say">
+            <blockquote>Skibet, det er ships. Det er dem, vi synes, der passer godt sammen.</blockquote>
+            <figcaption>— Emma og Liv ved kærestevæggen</figcaption>
+            <button class="clip" data-t="1016" data-end="1022"><span class="clip-ico"><svg class="ci-play"><use href="#i-play"/></svg><svg class="ci-pause"><use href="#i-pause"/></svg></span><span>Hør det i radioen</span><span class="clip-len">0:06</span><i class="clip-bar"></i></button>
+          </figure>
+        </div>
+      </div>
+      <figure class="act-visual">
+        <button class="zoomable" data-full="assets/slides/slide-09.webp" data-caption="Værelset og fællesarealet: Et trygt hjem">
+          <img src="assets/slides/slide-09.webp" alt="Slide: Værelset og fællesarealet: Et trygt hjem" loading="lazy" width="1920" height="1072">
+        </button>
+        <figcaption>Fra præsentationen <em>Trivslens arkitektur</em></figcaption>
+      </figure>
+    </article>
+    <article class="act reveal">
+      <div class="act-text">
+        <p class="act-num"><span>04</span></p>
+        <h3>Hænderne lærer, hvad hovedet frygter</h3>
+        <p>For mange er papir og blyant forbundet med stress. I træ- og metalværkstedet lærer eleverne med kroppen – og oplever, at de kan. Undervisningen er praksisnær, også i de boglige fag.</p>
+        <div class="act-people" data-people="Sander|William"></div>
+        <p class="aside"><button class="clip" data-t="2170" data-end="2186"><span class="clip-ico"><svg class="ci-play"><use href="#i-play"/></svg><svg class="ci-pause"><use href="#i-pause"/></svg></span><span>Hør Williams motor starte</span><span class="clip-len">0:16</span><i class="clip-bar"></i></button></p>
+        <div class="says">
+          <figure class="say">
+            <blockquote>Man føler sig lidt mere fri i det. Man føler sig lidt mere afslappet i det, i stedet for stressende.</blockquote>
+            <figcaption>— Sander, træværkstedet</figcaption>
+            <button class="clip" data-t="2093" data-end="2100"><span class="clip-ico"><svg class="ci-play"><use href="#i-play"/></svg><svg class="ci-pause"><use href="#i-pause"/></svg></span><span>Hør det i radioen</span><span class="clip-len">0:07</span><i class="clip-bar"></i></button>
+          </figure>
+        </div>
+      </div>
+      <figure class="act-visual">
+        <button class="zoomable" data-full="assets/slides/slide-07.webp" data-caption="Værkstedet: Når hænderne lærer, hvad hovedet frygter">
+          <img src="assets/slides/slide-07.webp" alt="Slide: Værkstedet: Når hænderne lærer, hvad hovedet frygter" loading="lazy" width="1920" height="1072">
+        </button>
+        <figcaption>Fra præsentationen <em>Trivslens arkitektur</em></figcaption>
+      </figure>
+    </article>
+    <article class="act reveal">
+      <div class="act-text">
+        <p class="act-num"><span>05</span></p>
+        <h3>Voksne, der har tid til den enkelte</h3>
+        <p>Små hold og mange voksne betyder, at nogen opdager det, når en elev har det svært. Et trivselsteam arbejder med selvværd og skolevægring, og både lærere, pedel og sekretær er en del af fællesskabet.</p>
+        <div class="act-people" data-people="Kjeld|Tobias|Martin|Charlotte"></div>
+        
+        <div class="says">
+          <figure class="say">
+            <blockquote>… en hel begejstring over, at deres barn er støjende. Fordi det har de aldrig oplevet før.</blockquote>
+            <figcaption>— Kjeld, lærer, om forældresamtaler</figcaption>
+            <button class="clip" data-t="2322" data-end="2342"><span class="clip-ico"><svg class="ci-play"><use href="#i-play"/></svg><svg class="ci-pause"><use href="#i-pause"/></svg></span><span>Hør det i radioen</span><span class="clip-len">0:20</span><i class="clip-bar"></i></button>
+          </figure>
+          <figure class="say">
+            <blockquote>At vi er en stor familie, og at de kan komme til mig lige så vel, som de kan komme til lærerne.</blockquote>
+            <figcaption>— Martin, pedel og tidligere elev</figcaption>
+            <button class="clip" data-t="1727" data-end="1742"><span class="clip-ico"><svg class="ci-play"><use href="#i-play"/></svg><svg class="ci-pause"><use href="#i-pause"/></svg></span><span>Hør det i radioen</span><span class="clip-len">0:15</span><i class="clip-bar"></i></button>
+          </figure>
+        </div>
+      </div>
+      <figure class="act-visual">
+        <button class="zoomable" data-full="assets/slides/slide-04.webp" data-caption="Du er aldrig alene: Vores voksen-økosystem">
+          <img src="assets/slides/slide-04.webp" alt="Slide: Du er aldrig alene: Vores voksen-økosystem" loading="lazy" width="1920" height="1072">
+        </button>
+        <figcaption>Fra præsentationen <em>Trivslens arkitektur</em></figcaption>
+      </figure>
+    </article>
+    <article class="act reveal">
+      <div class="act-text">
+        <p class="act-num"><span>06</span></p>
+        <h3>Og det virker</h3>
+        <p>Trivsel er ikke på bekostning af de faglige resultater – det er forudsætningen for dem. Næsten alle elever går til alle deres afgangsprøver, og 10. klasse foregår i samarbejde med EUC Tønder.</p>
+        <div class="act-people" data-people="Jesper"></div>
+        <ul class="facts"><li><strong>≈100 %</strong><span>går til alle afgangsprøver</span></li><li><strong>8.–10.</strong><span>klasse – med ledige pladser</span></li><li><strong>~12</strong><span>andetårselever i år</span></li></ul>
+        <div class="says">
+          <figure class="say">
+            <blockquote>Der er næsten 100 % af eleverne, der går til alle deres afgangsprøver og får deres 9. og 10. klasses bevis.</blockquote>
+            <figcaption>— Jesper, forstander</figcaption>
+            <button class="clip" data-t="1401" data-end="1413"><span class="clip-ico"><svg class="ci-play"><use href="#i-play"/></svg><svg class="ci-pause"><use href="#i-pause"/></svg></span><span>Hør det i radioen</span><span class="clip-len">0:12</span><i class="clip-bar"></i></button>
+          </figure>
+        </div>
+      </div>
+      <figure class="act-visual">
+        <button class="zoomable" data-full="assets/slides/slide-11.webp" data-caption="Emmerske-ligningen">
+          <img src="assets/slides/slide-11.webp" alt="Slide: Emmerske-ligningen" loading="lazy" width="1920" height="1072">
+        </button>
+        <figcaption>Fra præsentationen <em>Trivslens arkitektur</em></figcaption>
+      </figure>
+    </article>
+    </div>
+  </div>
+</section>
+
 <!-- PLAYER -->
 <section class="section player-section" id="lyt">
   <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow">Hele udsendelsen</p>
+      <h2>Hør de 49 minutter</h2>
+      <p>Hele programmet fra Radio Globus, med kapitler og tekst, der kører med.</p>
+    </header>
     <div class="player card" id="player">
       <div class="player-head">
         <div class="now">
@@ -135,12 +295,6 @@
         </div>
       </div>
 
-      <div class="captions" id="captions" aria-live="off">
-        <p class="cap-label">Læs med <span class="muted">· automatisk transskription</span></p>
-        <p class="cap prev" id="capPrev"></p>
-        <p class="cap cur" id="capCur">Tryk på afspil – så kører teksten med her.</p>
-        <p class="cap next" id="capNext"></p>
-      </div>
     </div>
     <p class="resume" id="resume" hidden>Du var nået til <strong id="resumeAt"></strong> sidst. <button class="link-btn" id="resumeBtn">Fortsæt derfra</button></p>
     <p class="kbd-hint">Genveje: <kbd>mellemrum</kbd> afspil/pause · <kbd>←</kbd><kbd>→</kbd> spol · <kbd>N</kbd>/<kbd>P</kbd> næste/forrige kapitel</p>
@@ -180,28 +334,6 @@
       <p>Hvert citat kan afspilles direkte fra udsendelsen.</p>
     </header>
     <div class="quotes" id="quotes"></div>
-  </div>
-</section>
-
-<!-- TRANSCRIPT -->
-<section class="section" id="transskription">
-  <div class="wrap">
-    <header class="sec-head">
-      <p class="eyebrow">Hele udsendelsen som tekst</p>
-      <h2>Transskription</h2>
-      <p>Klik på en sætning for at høre den. Teksten er lavet automatisk og kan indeholde fejl – lyden er den rigtige kilde.</p>
-    </header>
-    <div class="ts-bar">
-      <label class="search"><svg><use href="#i-search"/></svg><span class="sr">Søg i transskriptionen</span><input id="tsSearch" type="search" placeholder="Søg fx “fællesskab”, “ordblind”, “kærestevæg”…" autocomplete="off"></label>
-      <span class="ts-count" id="tsCount"></span>
-      <button class="icon-btn sm" id="tsPrev" title="Forrige fund"><svg><use href="#i-up"/></svg><span class="sr">Forrige fund</span></button>
-      <button class="icon-btn sm" id="tsNext" title="Næste fund"><svg><use href="#i-down"/></svg><span class="sr">Næste fund</span></button>
-      <label class="toggle"><input type="checkbox" id="tsFollow" checked> <span>Følg lyden</span></label>
-    </div>
-    <div class="ts-layout">
-      <nav class="ts-toc" id="tsToc" aria-label="Kapitler i transskriptionen"></nav>
-      <div class="transcript" id="transcript" tabindex="0"></div>
-    </div>
   </div>
 </section>
 
@@ -254,7 +386,7 @@
     <header class="sec-head">
       <p class="eyebrow">Til undervisning og videre læsning</p>
       <h2>Tekst og materialer</h2>
-      <p>Hent transskriptionen, præsentationen og infografikkerne.</p>
+      <p>Hent præsentationen og infografikkerne.</p>
     </header>
     <div class="downloads" id="downloads"></div>
   </div>
