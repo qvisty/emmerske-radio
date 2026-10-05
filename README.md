@@ -25,3 +25,6 @@ Titler, beskrivelser, medvirkende og citater redigeres øverst i `tools/build_da
 
 ## Redigerbar præsentation
 `Filer/Trivslens Arkitektur Emmerske Efterskole.pptx` (og den tilhørende PDF samt billederne i `assets/slides`) er bygget med `tools/make_editable_pptx.py` ud fra de oprindelige dias i `tools/kilde/`: teksten i de oprindelige (flade) dias er fundet med Windows' OCR, fjernet fra billedet og lagt ind som tekstbokse. Håndskrevne noter i tegningerne er en del af billedet. Kræver Windows med PowerPoint og `pip install pymupdf python-pptx opencv-python-headless pillow`. Hvilke tekster der bliver tekstbokse, styres af `SLIDES` øverst i scriptet.
+
+## Logo
+`assets/img/logo.svg` (og faviconet) er lavet med `tools/make_logo.py` ud fra `Filer/Emmerske Efterskole logo.png`. Logoet er sporet som vektorgrafik, så det er skarpt i alle størrelser. Ordet EMMERSKE følger tekstfarven, og det grønne skifter til en lysere nuance i mørkt tema. Kræver `pip install pillow numpy potracer`.
